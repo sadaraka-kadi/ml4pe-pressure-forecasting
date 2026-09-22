@@ -102,8 +102,7 @@ The notebook uses a fixed random seed (`42`) for reproducibility. It writes expe
 
 - This is a small time-series dataset, so an LSTM may overfit easily.
 - The chronological split is intentional: future observations must not be used to train the model or fit preprocessing steps.
-- The current repository contains the exploratory analysis and classical baselines; the LSTM experiment and extended error/uncertainty analysis remain areas for further work.
-
+  
 ## License
 
 See [LICENSE](LICENSE).
