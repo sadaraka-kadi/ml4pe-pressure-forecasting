@@ -1,6 +1,6 @@
 timestamp,track,model,split,RMSE_psia,MAE_psia,notes
-2026-09-23 00:29,C,Persistence,Temporal train/test,85.3063,49.4778,Best baseline model - The model to beat
-2026-09-23 00:29,C,Random Forest -- Pressure lags only,Temporal train/test,92.8296,68.1475,"RF does not perform better than persistence, does not extrapolate well on unseen data"
-2026-09-23 00:29,C,Random Forest -- Pressure + Drivers,Temporal train/test,95.1415,68.428,Additional drivers hurt the RF slightly
-2026-09-23 00:29,C,LSTM -- 3 features (pressure + drivers),Temporal train/test,87.4658,67.2193,"Roughly matches persistence on RMSE, worse on MAE"
-2026-09-23 00:29,C,LSTM -- 3 features (pressure + drivers),Temporal train/test,79.3961,51.2499,"Beats persistence on RMSE, comparable on MAE"
+2026-09-23 00:34,C,Persistence,Temporal train/test,85.3063,49.4778,Best baseline model - The model to beat
+2026-09-23 00:34,C,Random Forest -- Pressure lags only,Temporal train/test,92.8296,68.1475,"RF does not perform better than persistence, does not extrapolate well on unseen data"
+2026-09-23 00:34,C,Random Forest -- Pressure + Drivers,Temporal train/test,95.1415,68.428,Additional drivers hurt the RF slightly
+2026-09-23 00:34,C,LSTM -- Pressure level,Temporal train/test,87.4658,67.2193,"Roughly matches persistence on RMSE, worse on MAE"
+2026-09-23 00:34,C,LSTM -- Pressure change,Temporal train/test,79.3961,51.2499,"Beats persistence on RMSE, comparable on MAE"
