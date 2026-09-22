@@ -89,7 +89,7 @@ Launch Jupyter from the repository root:
 jupyter notebook
 ```
 
-Open `notebooks/Capstone_Student_Track_C.ipynb` and run the cells from top to bottom. Because the notebook uses paths relative to the `notebooks/` directory, running it with a Jupyter working directory set to `notebooks/` is recommended. Alternatively, update `DATA_DIR` and `LOG_PATH` if your environment uses a different working directory.
+Open `notebooks/capstone.ipynb` and run the cells from top to bottom. Because the notebook uses paths relative to the `notebooks/` directory, running it with a Jupyter working directory set to `notebooks/` is recommended. Alternatively, update `DATA_DIR` and `LOG_PATH` if your environment uses a different working directory.
 
 The notebook uses a fixed random seed (`42`) for reproducibility. It writes experiment results to `results/capstone_results_log.csv`.
 
