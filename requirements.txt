@@ -1,0 +1,6 @@
+# Python 3.11.15
+numpy==2.4.6
+pandas==3.0.3
+matplotlib==3.11.0
+sklearn==1.9.0
+torch==2.11.0
