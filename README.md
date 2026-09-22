@@ -56,7 +56,9 @@ The evaluation uses the final 18 months as a held-out test period and reports RM
 | LSTM - level pressure | 87.5 | 67.2 |
 | LSTM - pressure change | 79.4 | 51.2|
 
-The persistence model is the current benchmark to beat. Results are recorded in `results/capstone_results_log.csv`.
+The persistence model was the current benchmark to beat. 
+The LSTM predicting pressure change beat the persistence model in regards with RMSE and is comparable by MAE
+Results are recorded in `results/capstone_results_log.csv`.
 
 ## Installation
 
