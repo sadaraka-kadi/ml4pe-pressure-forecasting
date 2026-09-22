@@ -4,7 +4,7 @@ Time-series forecasting of reservoir pressure using production and injection dat
 
 ## Project question
 
-> Can an LSTM beat the persistence baseline when forecasting reservoir pressure?
+> How well can we forecast next month's reservoir pressure using production and injection data?
 
 The target is `Pressure_psia`. The notebook derives monthly oil-production and water-injection rates from cumulative volumes, creates lagged features, and evaluates one-month-ahead forecasts using a chronological train/test split.
 
@@ -15,7 +15,7 @@ The target is `Pressure_psia`. The notebook derives monthly oil-production and w
 ├── data/
 │   └── volve_field_production.csv       # Monthly Volve field data
 ├── notebooks/
-│   └── Capstone_Student_Track_C.ipynb   # EDA, baselines, and model experiments
+│   └── capstone.ipynb                   # EDA, baselines, and model experiments
 ├── results/
 │   └── capstone_results_log.csv         # Experiment metrics
 ├── requirements.txt
@@ -89,7 +89,7 @@ Launch Jupyter from the repository root:
 jupyter notebook
 ```
 
-Open `notebooks/Capstone_Student_Track_C.ipynb` and run the cells from top to bottom. Because the notebook uses paths relative to the `notebooks/` directory, running it with a Jupyter working directory set to `notebooks/` is recommended. Alternatively, update `DATA_DIR` and `LOG_PATH` if your environment uses a different working directory.
+Open `notebooks/capstone.ipynb` and run the cells from top to bottom. Because the notebook uses paths relative to the `notebooks/` directory, running it with a Jupyter working directory set to `notebooks/` is recommended. Alternatively, update `DATA_DIR` and `LOG_PATH` if your environment uses a different working directory.
 
 The notebook uses a fixed random seed (`42`) for reproducibility. It writes experiment results to `results/capstone_results_log.csv`.
 
