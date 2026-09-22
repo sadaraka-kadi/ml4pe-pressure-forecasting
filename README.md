@@ -15,7 +15,7 @@ The target is `Pressure_psia`. The notebook derives monthly oil-production and w
 ├── data/
 │   └── volve_field_production.csv       # Monthly Volve field data
 ├── notebooks/
-│   └── Capstone_Student_Track_C.ipynb   # EDA, baselines, and model experiments
+│   └── capstone.ipynb                   # EDA, baselines, and model experiments
 ├── results/
 │   └── capstone_results_log.csv         # Experiment metrics
 ├── requirements.txt
