@@ -1,4 +1,4 @@
-# ML4PE Pressure Forecasting
+# Reservoir Pressure Forecasting
 
 Time-series forecasting of reservoir pressure using production and injection data from the Volve field. This project is part of a capstone for **Machine Learning for Petroleum Engineers & Geoscientists** and investigates whether an LSTM can outperform simpler forecasting baselines.
 
