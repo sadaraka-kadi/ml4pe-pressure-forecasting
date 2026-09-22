@@ -1,0 +1,4 @@
+timestamp,track,model,split,RMSE_psia,MAE_psia,notes
+2026-09-22 15:16,C,Persistence,Temporal train/test,85.3063,49.4778,Best model
+2026-09-22 15:16,C,Random Forest -- Pressure lags only,Temporal train/test,92.8296,68.1475,-
+2026-09-22 15:16,C,Random Forest -- Pressure + Drivers,Temporal train/test,95.1415,68.428,Additional drivers hurt the RF slightly
