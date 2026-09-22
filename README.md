@@ -4,7 +4,7 @@ Time-series forecasting of reservoir pressure using production and injection dat
 
 ## Project question
 
-> Can an LSTM beat the persistence baseline when forecasting reservoir pressure?
+> How well can we forecast next month's reservoir pressure using production and injection data?
 
 The target is `Pressure_psia`. The notebook derives monthly oil-production and water-injection rates from cumulative volumes, creates lagged features, and evaluates one-month-ahead forecasts using a chronological train/test split.
 
