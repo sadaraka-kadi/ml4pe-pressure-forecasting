@@ -43,7 +43,8 @@ The notebook currently includes:
 - **Persistence baseline:** predicts the next pressure value using the previous month’s pressure.
 - **Random Forest — pressure lags only.**
 - **Random Forest — pressure lags plus production/injection drivers.**
-- **LSTM section:** reserved for the sequence-model experiment and further development.
+- **LSTM - Level Pressure.**
+- **LSTM - Pressure Change.**
 
 The evaluation uses the final 18 months as a held-out test period and reports RMSE and MAE in psia. The current logged baseline results are:
 
@@ -52,8 +53,12 @@ The evaluation uses the final 18 months as a held-out test period and reports RM
 | Persistence | 85.3 | 49.5 |
 | Random Forest — pressure lags only | 92.8 | 68.1 |
 | Random Forest — pressure + drivers | 95.1 | 68.4 |
+| LSTM - level pressure | 87.5 | 67.2 |
+| LSTM - pressure change | 79.4 | 51.2|
 
-The persistence model is the current benchmark to beat. Results are recorded in `results/capstone_results_log.csv`.
+The persistence model was the current benchmark to beat. 
+The LSTM predicting pressure change beat the persistence model in regards with RMSE and is comparable by MAE.
+Results are recorded in `results/capstone_results_log.csv`.
 
 ## Installation
 
@@ -97,8 +102,7 @@ The notebook uses a fixed random seed (`42`) for reproducibility. It writes expe
 
 - This is a small time-series dataset, so an LSTM may overfit easily.
 - The chronological split is intentional: future observations must not be used to train the model or fit preprocessing steps.
-- The current repository contains the exploratory analysis and classical baselines; the LSTM experiment and extended error/uncertainty analysis remain areas for further work.
-
+  
 ## License
 
 See [LICENSE](LICENSE).
