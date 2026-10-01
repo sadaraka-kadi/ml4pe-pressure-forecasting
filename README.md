@@ -8,6 +8,8 @@ One-month-ahead forecasting of field-average reservoir pressure from production 
 
 The target is `Pressure_psia` (psia). A model is considered useful only if it beats **persistence** (next month's pressure = this month's) by a margin that survives resampling.
 
+The full write-up is in [`report/report.pdf`](report/report.pdf) and the slides are in [`report/presentation.pdf`](report/presentation.pdf).
+
 ## Key findings
 
 - **Persistence is a hard baseline.** It scores RMSE 85.3 psia and MAE 49.5 psia on the 18 held-out months.
@@ -25,9 +27,13 @@ The target is `Pressure_psia` (psia). A model is considered useful only if it be
 │   └── volve_field_production.csv       # Monthly Volve field data
 ├── notebooks/
 │   └── capstone.ipynb                   # Full analysis: EDA, baselines, experiments, uncertainty
+├── report/
+│   ├── report.pdf                       # Written report (4-6 pages) with model card appendix
+│   └── presentation.pdf                 # Final presentation slides
 ├── results/
 │   ├── capstone_results_log.csv         # Every experiment, including the ones that failed
 │   └── figures/                         # Figures saved by the notebook (adjust to your FIG_PATH)
+├── .gitignore
 ├── requirements.txt
 ├── LICENSE
 └── README.md
