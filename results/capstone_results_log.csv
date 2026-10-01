@@ -1,6 +1,32 @@
 timestamp,track,model,split,RMSE_psia,MAE_psia,notes
-2026-09-23 00:34,C,Persistence,Temporal train/test,85.3063,49.4778,Best baseline model - The model to beat
-2026-09-23 00:34,C,Random Forest -- Pressure lags only,Temporal train/test,92.8296,68.1475,"RF does not perform better than persistence, does not extrapolate well on unseen data"
-2026-09-23 00:34,C,Random Forest -- Pressure + Drivers,Temporal train/test,95.1415,68.428,Additional drivers hurt the RF slightly
-2026-09-23 00:34,C,LSTM -- Pressure level,Temporal train/test,87.4658,67.2193,"Roughly matches persistence on RMSE, worse on MAE"
-2026-09-23 00:34,C,LSTM -- Pressure change,Temporal train/test,79.3961,51.2499,"Beats persistence on RMSE, comparable on MAE"
+2026-10-01 14:15,C,Persistence (baseline),Last 18 months,85.3063,49.4778,Week 15
+2026-10-01 14:15,C,Random Forest -- Pressure lags only,Last 18 months,92.8296,68.1475,Week 15
+2026-10-01 14:15,C,Random Forest -- Pressure + Drivers,Last 18 months,95.1415,68.428,Week 15
+2026-10-01 14:16,C,Persistence,last 18 months,85.3,49.5,Week 16
+2026-10-01 14:16,C,RF -- pressure lags only,last 18 months,92.8,68.1,Week 16
+2026-10-01 14:16,C,RF -- pressure + drivers,last 18 months,95.1,68.4,Week 16
+2026-10-01 14:16,C,Ridge on dP -- pressure history only,last 18 months,85.5,49.4,Week 16
+2026-10-01 14:16,C,Ridge on dP -- pressure + drivers,last 18 months,82.0,50.3,Week 16
+2026-10-01 14:16,C,LSTM on dP -- pressure only (5-seed mean),last 18 months,81.1,51.8,Week 16
+2026-10-01 14:16,C,LSTM on dP -- pressure + drivers (5-seed mean),last 18 months,82.0,57.1,Week 16
+2026-10-01 14:16,C,Ridge on dP (LAGS=3) -- pressure history only,last 18 months,85.5,49.4,Week 16
+2026-10-01 14:16,C,Ridge on dP (LAGS=3) -- pressure + drivers,last 18 months,82.9,50.0,Week 16
+2026-10-01 14:16,C,Ridge on dP (LAGS=6) -- pressure history only,last 18 months,85.5,49.4,Week 16
+2026-10-01 14:16,C,Ridge on dP (LAGS=6) -- pressure + drivers,last 18 months,82.0,50.3,Week 16
+2026-10-01 14:16,C,Ridge on dP (LAGS=12) -- pressure history only,last 18 months,86.5,49.7,Week 16
+2026-10-01 14:16,C,Ridge on dP (LAGS=12) -- pressure + drivers,last 18 months,83.3,48.5,Week 16
+2026-10-01 14:18,C,LSTM on dP (LAGS=3) -- pressure only (5-seed mean),last 18 months,79.0,49.7,Week 16
+2026-10-01 14:18,C,LSTM on dP (LAGS=3) -- pressure + drivers (5-seed mean),last 18 months,87.1,52.0,Week 16
+2026-10-01 14:18,C,LSTM on dP (LAGS=6) -- pressure only (5-seed mean),last 18 months,81.1,51.8,Week 16
+2026-10-01 14:18,C,LSTM on dP (LAGS=6) -- pressure + drivers (5-seed mean),last 18 months,82.0,57.1,Week 16
+2026-10-01 14:18,C,LSTM on dP (LAGS=12) -- pressure only (5-seed mean),last 18 months,81.0,59.0,Week 16
+2026-10-01 14:18,C,LSTM on dP (LAGS=12) -- pressure + drivers (5-seed mean),last 18 months,90.7,72.3,Week 16
+2026-10-01 14:18,C,[Oil rate] Persistence,last 18 months,0.0506,0.0407,"Week 16, Experiment 3: target = oil rate (MMSTB)"
+2026-10-01 14:18,C,[Oil rate] Ridge on dOilRate -- oil rate history only,last 18 months,0.0547,0.0441,"Week 16, Experiment 3: target = oil rate (MMSTB)"
+2026-10-01 14:18,C,[Oil rate] Ridge on dOilRate -- oil rate + drivers,last 18 months,0.1111,0.0728,"Week 16, Experiment 3: target = oil rate (MMSTB)"
+2026-10-01 14:18,C,[Oil rate] LSTM on dOilRate -- oil rate only (5-seed mean),last 18 months,0.1701,0.1209,"Week 16, Experiment 3: target = oil rate (MMSTB)"
+2026-10-01 14:18,C,[Oil rate] LSTM on dOilRate -- pressure + drivers (5-seed mean),last 18 months,0.1958,0.1634,"Week 16, Experiment 3: target = oil rate (MMSTB)"
+2026-10-01 14:18,C,"LSTM -- pressure only (recursive, pooled)",last 18 months,127.85,91.9684,Week 16
+2026-10-01 14:18,C,"Ridge -- pressure + drivers (recursive, pooled)",last 18 months,129.1218,94.8665,Week 16
+2026-10-01 14:18,C,"Ridge -- pressure only (recursive, pooled)",last 18 months,131.4853,90.8912,Week 16
+2026-10-01 14:18,C,"LSTM -- pressure + drivers (recursive, pooled)",last 18 months,245.4077,164.7849,Week 16
