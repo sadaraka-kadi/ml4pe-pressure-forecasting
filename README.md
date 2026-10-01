@@ -1,12 +1,21 @@
 # Reservoir Pressure Forecasting
 
-Time-series forecasting of reservoir pressure using production and injection data from the Volve field. This project is part of a capstone for **Machine Learning for Petroleum Engineers & Geoscientists** and investigates whether an LSTM can outperform simpler forecasting baselines.
+One-month-ahead forecasting of field-average reservoir pressure from production and injection history at the Volve field. This is the capstone project (Track C) for **Machine Learning for Petroleum Engineers & Geoscientists**.
 
 ## Project question
 
 > How well can we forecast next month's reservoir pressure using production and injection data?
 
-The target is `Pressure_psia`. The notebook derives monthly oil-production and water-injection rates from cumulative volumes, creates lagged features, and evaluates one-month-ahead forecasts using a chronological train/test split.
+The target is `Pressure_psia` (psia). A model is considered useful only if it beats **persistence** (next month's pressure = this month's) by a margin that survives resampling.
+
+## Key findings
+
+- **Persistence is a hard baseline.** It scores RMSE 85.3 psia and MAE 49.5 psia on the 18 held-out months.
+- **Predicting the monthly pressure change (ΔP) fixes the Random Forest problem.** Random Forests that predict the pressure *level* lose to persistence by 9-12% because trees cannot extrapolate beyond the pressures seen in training.
+- **The best models tie persistence.** Ridge on ΔP with drivers reaches RMSE 82.0 psia (3.9% lower), but the gain is within sampling noise: a paired block bootstrap over the test months gives a 90% interval of -3.4% to +6.4%, and MAE is not better (50.3 vs 49.5 psia).
+- **One event drives the error.** The 2016-09 and 2016-10 shut-in (+277 and +151 psia) carries most of the squared error, and no model anticipates it, because the training period contains no shut-in.
+- **Uncertainty.** An empirical 90% prediction interval of about ±70 psia (from walk-forward errors on the training months) covers 16 of 18 held-out months, and all months outside the shut-in.
+- **Negative results are reported.** Forecasting oil rate instead of pressure, adding drivers to the LSTM, and six-month recursive forecasts did not beat a flat line.
 
 ## Repository structure
 
@@ -15,56 +24,63 @@ The target is `Pressure_psia`. The notebook derives monthly oil-production and w
 ├── data/
 │   └── volve_field_production.csv       # Monthly Volve field data
 ├── notebooks/
-│   └── capstone.ipynb                   # EDA, baselines, and model experiments
+│   └── capstone.ipynb                   # Full analysis: EDA, baselines, experiments, uncertainty
 ├── results/
-│   └── capstone_results_log.csv         # Experiment metrics
+│   ├── capstone_results_log.csv         # Every experiment, including the ones that failed
+│   └── figures/                         # Figures saved by the notebook (adjust to your FIG_PATH)
 ├── requirements.txt
+├── LICENSE
 └── README.md
 ```
 
 ## Dataset
 
-`data/volve_field_production.csv` contains 112 monthly observations from September 2007 through December 2016. The source fields include:
+`data/volve_field_production.csv` has 112 monthly observations (2007-09 to 2016-12) and 8 columns, with no missing values:
 
-- Average reservoir pressure (`Pressure_psia`)
-- Cumulative oil production (`CumOil_STB`)
-- Cumulative gas production (`CumGas_SCF`)
-- Cumulative water production (`CumWater_STB`)
-- Gas injection (`GasInj_SCF`)
-- Water injection (`WaterInj_STB`)
-- Gas-oil ratio (`GOR_scf_per_stb`)
+- `Pressure_psia`: average reservoir pressure
+- `CumOil_STB`, `CumGas_SCF`, `CumWater_STB`: cumulative production
+- `GasInj_SCF`: gas injection (zero throughout, so unused)
+- `WaterInj_STB`: cumulative water injection
+- `GOR_scf_per_stb`: gas-oil ratio
 
-The notebook converts cumulative oil and water volumes into monthly rates and uses pressure, oil rate, and water-injection rate as the principal drivers. The data is a public, community-processed version of the Volve reservoir simulation history-match output.
+The data is a public, community-processed version (`yohanesnuwara/pyreservoir`) of Equinor's Volve reservoir-simulation history-match output, so these are **simulation-derived field averages, not raw gauge measurements**. Production starts in 2008-02 and water injection in 2008-04.
 
-## Models and evaluation
+The notebook turns the cumulative columns into monthly oil rate and water injection rate (MMSTB/month) by differencing, then uses pressure, oil rate and water injection rate as inputs.
 
-The notebook currently includes:
+## Method
 
-- **Persistence baseline:** predicts the next pressure value using the previous month’s pressure.
-- **Random Forest — pressure lags only.**
-- **Random Forest — pressure lags plus production/injection drivers.**
-- **LSTM - Level Pressure.**
-- **LSTM - Pressure Change.**
+- **Split:** chronological. 88 training months (2008-03 to 2015-06) and 18 test months (2015-07 to 2016-12). The first six months only supply lag history. A shuffled split would leak neighbouring months into training.
+- **Target:** the monthly pressure change, ΔP = P(t) - P(t-1). The forecast is the last known pressure plus the predicted change, which makes persistence the special case ΔP = 0.
+- **Inputs:** six months of lagged pressure changes, optionally with six months of lagged oil rate and water injection rate.
+- **Models:** persistence, Random Forest (on the pressure level), Ridge regression (on ΔP) and a small LSTM (one layer, 16 hidden units; mean of five fixed seeds).
+- **Leakage control:** scalers are fitted on training months only, and lag length and regularisation are chosen by walk-forward cross-validation (`TimeSeriesSplit`) on the training months only. The test months are used to report results, not to choose models.
+- **Metrics:** RMSE (primary) and MAE, both in psia.
 
-The evaluation uses the final 18 months as a held-out test period and reports RMSE and MAE in psia. The current logged baseline results are:
+## Results
 
-| Model | RMSE (psia) | MAE (psia) |
-|---|---:|---:|
-| Persistence | 85.3 | 49.5 |
-| Random Forest — pressure lags only | 92.8 | 68.1 |
-| Random Forest — pressure + drivers | 95.1 | 68.4 |
-| LSTM - level pressure | 87.5 | 67.2 |
-| LSTM - pressure change | 79.4 | 51.2|
+All rows use the same split (the last 18 months held out). Percentages are RMSE relative to persistence.
 
-The persistence model was the current benchmark to beat. 
-The LSTM predicting pressure change beat the persistence model in regards with RMSE and is comparable by MAE.
-Results are recorded in `results/capstone_results_log.csv`.
+| Model | RMSE (psia) | MAE (psia) | vs persistence |
+|---|---:|---:|---:|
+| Persistence (baseline) | 85.3 | 49.5 | 0.0% |
+| Random Forest, pressure lags only | 92.8 | 68.1 | -8.8% |
+| Random Forest, pressure + drivers | 95.1 | 68.4 | -11.5% |
+| Ridge on ΔP, pressure only (6 lags) | 85.5 | 49.4 | -0.2% |
+| **Ridge on ΔP, pressure + drivers (6 lags)** | **82.0** | **50.3** | **+3.9%** |
+| LSTM on ΔP, pressure only (6 lags) | 81.1 | 51.8 | +4.9% |
+| LSTM on ΔP, pressure + drivers (6 lags) | 82.0 | 57.1 | +3.9% |
+| LSTM on ΔP, pressure + drivers (12 lags, best LSTM by training CV) | 90.7 | 72.3 | -6.3% |
+| LSTM on ΔP, pressure only (3 lags, lowest test RMSE, not chosen by CV) | 79.0 | 49.7 | +7.4% |
 
-## Installation
+Ridge with drivers is reported as the final model because it is the best Ridge variant by training CV, it is deterministic, and with only 88 training samples a simple linear model is the lower-risk choice. This is a judgement about simplicity and stability, **not** evidence of higher accuracy: its RMSE is within noise of persistence, and a shared walk-forward CV on the training months ranks persistence first.
 
-Python 3.9 or newer is recommended.
+The full set of runs, including the lag grid, oil-rate and recursive experiments, is in `results/capstone_results_log.csv`.
 
-1. Clone the repository and enter the project directory:
+## Reproducing the results
+
+Python 3.11 was used (the pinned versions in `requirements.txt` were run on Python 3.11.15).
+
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/sadaraka-kadi/ml4pe-pressure-forecasting.git
@@ -75,8 +91,8 @@ Python 3.9 or newer is recommended.
 
    ```bash
    python -m venv .venv
-   source .venv/bin/activate      # macOS/Linux
-   # .venv\\Scripts\\activate   # Windows PowerShell
+   source .venv/bin/activate        # macOS/Linux
+   .venv\Scripts\activate           # Windows PowerShell
    ```
 
 3. Install the dependencies:
@@ -86,23 +102,28 @@ Python 3.9 or newer is recommended.
    pip install -r requirements.txt
    ```
 
-## Running the notebook
+4. Launch Jupyter, open `notebooks/capstone.ipynb`, and run **Kernel -> Restart & Run All**:
 
-Launch Jupyter from the repository root:
+   ```bash
+   jupyter notebook
+   ```
 
-```bash
-jupyter notebook
-```
+The notebook uses paths relative to the `notebooks/` directory (`DATA_DIR = "../data"`, `LOG_PATH = "../results/..."`), so start Jupyter from the repository root and open the notebook from there, or edit those two variables if your working directory differs. A global seed (`42`) is set, and each LSTM result is the mean of five fixed seeds. The LSTM experiments take the longest to run. Individual LSTM runs vary with the seed, so small differences in the LSTM rows are expected on other hardware.
 
-Open `notebooks/capstone.ipynb` and run the cells from top to bottom. Because the notebook uses paths relative to the `notebooks/` directory, running it with a Jupyter working directory set to `notebooks/` is recommended. Alternatively, update `DATA_DIR` and `LOG_PATH` if your environment uses a different working directory.
+## Limitations
 
-The notebook uses a fixed random seed (`42`) for reproducibility. It writes experiment results to `results/capstone_results_log.csv`.
+- Small sample: 112 monthly points, 88 for training and 18 for testing. The conclusion rests on one 18-month window, and two shut-in months determine most of the test error.
+- Simulation-derived field averages, so the series is smoother than gauge data and results may not transfer to measured data or other fields.
+- Persistence is not clearly beaten, and the LSTM is unstable at this data size.
+- Forecasts are one month ahead. Recursive six-month forecasts, which hold the drivers constant, did no better than a flat line.
+- The prediction interval assumes future months resemble the training months. It failed in the two shut-in months that did not.
 
-## Notes and limitations
+## Next steps
 
-- This is a small time-series dataset, so an LSTM may overfit easily.
-- The chronological split is intentional: future observations must not be used to train the model or fit preprocessing steps.
-  
-## License
+- Add an operational flag for planned shut-ins or rate cuts.
+- Evaluate with rolling-origin backtests over the whole history rather than a single window.
+- Test on well-level pressure data (Volve gauge records) and other fields.
 
-See [LICENSE](LICENSE).
+## Data source and license
+
+Data: Equinor's public Volve dataset, in the community-processed form from [`yohanesnuwara/pyreservoir`](https://github.com/yohanesnuwara/pyreservoir), subject to the Equinor Volve data license. Code: see [LICENSE](LICENSE).
