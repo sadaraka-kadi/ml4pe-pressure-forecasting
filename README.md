@@ -28,11 +28,11 @@ The full write-up is in [`report/report.pdf`](report/report.pdf) and the slides 
 ├── notebooks/
 │   └── capstone.ipynb                   # Full analysis: EDA, baselines, experiments, uncertainty
 ├── report/
-│   ├── report.pdf                       # Written report (4-6 pages) with model card appendix
+│   ├── report.pdf                       # Written report with model card appendix
 │   └── presentation.pdf                 # Final presentation slides
 ├── results/
 │   ├── capstone_results_log.csv         # Every experiment, including the ones that failed
-│   └── figures/                         # Figures saved by the notebook (adjust to your FIG_PATH)
+│   └── figures/                         # Figures saved by the notebook
 ├── .gitignore
 ├── requirements.txt
 ├── LICENSE
